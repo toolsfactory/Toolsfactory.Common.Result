@@ -11,6 +11,7 @@
     <Copyright>(c) 2024 Michael Geissler</Copyright>
     <PackageProjectUrl>github.com/toolsfactory/toolsfactory.common.result</PackageProjectUrl>
     <RepositoryUrl>github.com/toolsfactory/toolsfactory.common.result</RepositoryUrl>
+    <BaseOutputPath>..\..\bin\</BaseOutputPath>
   </PropertyGroup>
 
 </Project>
