@@ -33,7 +33,7 @@ jobs:
         useConfigFile: true
 
     - name: Build
-      run: dotnet build -c Release --no-restore /p:Version=$GITVERSION_NUGETVERSIONV2 /p:AssemblyVersion=$GITVERSION_ASSEMBLYSEMVER /p:InformationalVersion=$GITVERSION_INFORMATIONALVERSION
+      run: dotnet build -c Release --no-restore /p:Version=${{ env.AssemblySemVer }} /p:AssemblyVersion=${{ env.AssemblySemVer }} /p:InformationalVersion=${{ env.InformationalVersion }}
 
     - name: Show packages
       run: ls -la bin/
