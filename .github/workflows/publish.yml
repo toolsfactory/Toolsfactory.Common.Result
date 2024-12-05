@@ -42,4 +42,12 @@ jobs:
       run: dotnet nuget push bin/Release/*.nupkg -k ${{secrets.NUGET_PUBLISH_KEY}} -s https://api.nuget.org/v3/index.json
 
     - name: Create tag
-      run: git tag -a v${{ steps.gitversion.outputs.assemblySemVer }} -m "Version v${{ steps.gitversion.outputs.assemblySemVer }}"
+      uses: actions/github-script@v3
+      with:
+        script: |
+          github.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: "refs/tags/v${{ steps.gitversion.outputs.semVer }}",
+            sha: context.sha
+          })
