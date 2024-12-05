@@ -1,0 +1,56 @@
+name: Build & Publish Packages
+
+on: 
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: checkout repo
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+       
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v3
+      with:
+          versionSpec: '6.x'
+ 
+    - name: Restore dependencies
+      run: dotnet restore
+      
+    - name: Determine Version
+      id: gitversion
+      uses: gittools/actions/gitversion/execute@v3
+      with:
+        useConfigFile: true
+
+    - name: Test
+      run: dotnet test -c Release --verbosity normal  /p:Version=$GITVERSION_NUGETVERSIONV2 /p:AssemblyVersion=$GITVERSION_ASSEMBLYSEMVER /p:InformationalVersion=$GITVERSION_INFORMATIONALVERSION
+
+    - name: Build
+      run: dotnet build -c Release --no-restore /p:Version=$GITVERSION_NUGETVERSIONV2 /p:AssemblyVersion=$GITVERSION_ASSEMBLYSEMVER /p:InformationalVersion=$GITVERSION_INFORMATIONALVERSION
+
+    - name: Show packages
+      run: ls -la bin/
+
+    - name: Publish Package
+      run: dotnet nuget push bin/*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json
+
+    - name: Create tag
+      uses: actions/github-script@v5
+      with:
+        script: |
+          github.rest.git.createRef({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            ref: 'refs/tags/v${{ steps.gitversion.outputs.nuGetVersionV2 }}',
+            sha: context.sha
+          })    
