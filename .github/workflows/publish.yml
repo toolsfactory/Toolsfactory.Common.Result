@@ -48,6 +48,6 @@ jobs:
           github.rest.git.createRef({
             owner: context.repo.owner,
             repo: context.repo.repo,
-            ref: 'refs/tags/v${{ steps.gitversion.outputs.nuGetVersionV2 }}',
+            ref: 'refs/tags/v${{ steps.gitversion.outputs.assemblySemVer }}',
             sha: context.sha
           })    
