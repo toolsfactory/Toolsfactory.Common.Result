@@ -39,7 +39,7 @@ jobs:
       run: ls -la bin/Release/
 
     - name: Publish Package
-      run: dotnet nuget push bin/Release/*.nupkg -k ${{secrets.NUGET_PUBLISH_KEY}} -s https://api.nuget.org/v3/index.json
+      run: dotnet nuget push bin/Release/*.nupkg -k ${{secrets.NUGET_PUBLISH_KEY}} -s https://api.nuget.org/v3/index.json  --skip-duplicate
 
     - name: Create tag
       uses: actions/github-script@v3
