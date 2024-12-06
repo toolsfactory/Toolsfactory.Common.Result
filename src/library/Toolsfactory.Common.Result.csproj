@@ -4,7 +4,7 @@
     <TargetFrameworks>netstandard2.1;net8.0</TargetFrameworks>
 	<LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
-    <Title>Toolsfactory ResulthHelper classes</Title>
+    <Title>Toolsfactory Result Utility Library</Title>
     <Authors>Michael Geissler</Authors>
     <Company>Toolsfactory</Company>
     <Description>A small library providing result types for streamlined handling of regular results that can be successful or not avoiding exceptions.</Description>
@@ -12,6 +12,21 @@
     <PackageProjectUrl>github.com/toolsfactory/toolsfactory.common.result</PackageProjectUrl>
     <RepositoryUrl>github.com/toolsfactory/toolsfactory.common.result</RepositoryUrl>
     <BaseOutputPath>..\..\bin\</BaseOutputPath>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageTags>Result; Result&lt;T&gt;; Error; Union</PackageTags>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
