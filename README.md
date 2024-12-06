@@ -62,15 +62,21 @@ if (resultWithValue.IsSuccess)
 ### Using `Result<T>` with implicit conversion
 ```csharp
 record Person(string Name, int Age);
+var PersonDB = new List<Person> { new Person("Alice", 25), new Person("Bob", 30) };
+var result1 = GetPersonWithName("Alice");
+var result2 = GetPersonWithName("James");
+
 Result<Person> GetPersonWithName(string Name)
 {
     if (string.IsNullOrWhiteSpace(Name))
     {
-        return Result.Failure<Person>(new Error("Name cannot be empty"));
+        return new Error("Name cannot be empty"); // <= Implicit conversion to Result<Person>
     }
-    var person = PersonDB.Where(p => p.Name == Name).FirstOrDefault(); // <= Assume PersonDB is a list of Person records
+    var person = PersonDB.Where(p => p.Name == Name).FirstOrDefault();
     return person != null ? person : new Error("Person not found"); // <= Implicit conversion to Result<Person>
 }
+
+
 ```
 
 ### Handling Errors
