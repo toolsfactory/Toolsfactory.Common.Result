@@ -1,6 +1,18 @@
 # Toolsfactory.Common Result and Result<T> utility library
 
-The `Result` and `Result<T>` classes provide a robust way to represent the outcome of an operation in C#. This approach ensures operations can communicate success, failure, and relevant error details without relying on exceptions.
+The `Result` and `Result<T>` classes provide a robust way to represent the outcome of an operation in C#. This approach ensures operations can communicate success, failure, and relevant error details.
+
+## Why use `Result` and `Result<T>`?
+- **Clarity**: 
+  - Clearly communicate the outcome of an operation without relying on exceptions.
+  - Exceptions are for - as the name already implies - exceptional cases, not for regular control flow.
+- **Error Handling**: 
+  - Easily access error details when an operation fails.
+- **Simplicity**: 
+  - Simplify the handling of success and failure scenarios.
+  - The code gets more readable and maintainable.
+- **Performance**: 
+  - Avoid the performance overhead of throwing and catching exceptions.
 
 ## Key Features
 
