@@ -72,9 +72,172 @@ if (result.IsFaulted)
 }
 ```
 
-## Extensibility
-Custom error handling or additional utilities can be added using the `ResultExtensions` class.
+## Utility methods
+Switch and Map methods are provided to simplify handling success and failure scenarios.
+### Switch Method
+```csharp
+using System;
+using System.Collections.Generic;
+using Toolsfactory.Common;
 
----
+class Program
+{
+    static void Main()
+    {
+        // Example 1: Success scenario
+        var successResult = Result.Success();
 
-Let me know if you'd like further details added or the text tailored for a specific use case!
+        successResult.Switch(
+            onSuccess: () => Console.WriteLine("Operation was successful!"),
+            onFailure: errors =>
+            {
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.Message}");
+                }
+            }
+        );
+
+        // Example 2: Failure scenario
+        var failureResult = Result.Failure(new List<Error>
+        {
+            new Error("Invalid input"),
+            new Error("Connection timeout")
+        });
+
+        failureResult.Switch(
+            onSuccess: () => Console.WriteLine("Operation was successful!"),
+            onFailure: errors =>
+            {
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.Message}");
+                }
+            }
+        );
+    }
+}
+```
+
+### Generic Switch Method
+```csharp
+using System;
+using System.Collections.Generic;
+using Toolsfactory.Common;
+
+class Program
+{
+    static void Main()
+    {
+        // Example 1: Success scenario
+        var successResult = Result<int>.Success(42);
+
+        successResult.Switch(
+            onSuccess: value => Console.WriteLine($"Success! Value: {value}"),
+            onFailure: errors =>
+            {
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.Message}");
+                }
+            }
+        );
+
+        // Example 2: Failure scenario
+        var failureResult = Result<int>.Failure(new List<Error>
+        {
+            new Error("Division by zero"),
+            new Error("Value out of range")
+        });
+
+        failureResult.Switch(
+            onSuccess: value => Console.WriteLine($"Success! Value: {value}"),
+            onFailure: errors =>
+            {
+                foreach (var error in errors)
+                {
+                    Console.WriteLine($"Error: {error.Message}");
+                }
+            }
+        );
+    }
+}
+```
+
+
+### Map Method
+```csharp
+using System;
+using System.Collections.Generic;
+using Toolsfactory.Common;
+class Program
+{
+    static void Main()
+    {
+        // Example 1: Success scenario
+        var successResult = Result.Success();
+
+        string successMessage = successResult.Map(
+            onSuccess: () => "Operation was successful!",
+            onFailure: errors => string.Join(", ", errors.Select(e => e.Message))
+        );
+
+        Console.WriteLine(successMessage); // Output: Operation was successful!
+
+        // Example 2: Failure scenario
+        var failureResult = Result.Failure(new List<Error>
+        {
+            new Error("Invalid credentials"),
+            new Error("Account locked")
+        });
+
+        string failureMessage = failureResult.Map(
+            onSuccess: () => "Operation was successful!",
+            onFailure: errors => string.Join("; ", errors.Select(e => e.Message))
+        );
+
+        Console.WriteLine(failureMessage); 
+        // Output: Invalid credentials; Account locked
+    }
+}
+```
+
+### Generic Map Method
+```csharp
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Toolsfactory.Common;
+
+class Program
+{
+    static void Main()
+    {
+        // Example 1: Success scenario
+        var successResult = Result<int>.Success(100);
+
+        string successMessage = successResult.Map(
+            onSuccess: value => $"Operation succeeded with value: {value}",
+            onFailure: errors => string.Join("; ", errors.Select(e => e.Message))
+        );
+
+        Console.WriteLine(successMessage); 
+        // Output: Operation succeeded with value: 100
+
+        // Example 2: Failure scenario
+        var failureResult = Result<int>.Failure(new List<Error>
+        {
+            new Error("Network issue"),
+            new Error("Timeout occurred")
+        });
+
+        string failureMessage = failureResult.Map(
+            onSuccess: value => $"Operation succeeded with value: {value}",
+            onFailure: errors => $"Errors: {string.Join(", ", errors.Select(e => e.Message))}"
+        );
+
+        Console.WriteLine(failureMessage);
+        // Output: Errors: Network issue, Timeout occurred
+    }
+}
+```
