@@ -81,5 +81,12 @@ namespace Toolsfactory.Common
         /// </summary>
         /// <returns>A failed result instance.</returns>
         public new static Result<T> Failure() => new Result<T>(Error.Default);
+
+        /// <summary>
+        /// Creates a failed Result with a message.
+        /// </summary>
+        /// <param name="message">The error message to include in the Result.</param>
+        /// <returns>A failed Result instance.</returns>
+        public static Result<T> Failure(string message) => new Result<T>(new Error(message));
     }
 }

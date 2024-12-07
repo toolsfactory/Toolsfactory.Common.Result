@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Toolsfactory.Common
 {
@@ -19,6 +20,18 @@ namespace Toolsfactory.Common
         /// Gets a value indicating whether the result is faulted.
         /// </summary>
         public bool IsFaulted => !IsSuccess;
+
+        /// <summary>
+        /// Gets the root error of the result. If the result is successful, throws an exception.
+        /// </summary>
+        public Error RootError
+        {
+            get
+            {
+                if (IsFaulted) return _errors.FirstOrDefault() ?? Error.Default;
+                throw new InvalidOperationException("Cannot access Error of a success result");
+            }
+        }
 
         /// <summary>
         /// Gets the list of errors associated with the result.
@@ -129,5 +142,12 @@ namespace Toolsfactory.Common
         /// </summary>
         /// <returns>A failed Result instance.</returns>
         public static Result Failure() => new Result(Error.Default);
+
+        /// <summary>
+        /// Creates a failed Result with a message.
+        /// </summary>
+        /// <param name="message">The error message to include in the Result.</param>
+        /// <returns>A failed Result instance.</returns>
+        public static Result Failure(string message) => new Result(new Error(message));
     }
 }
