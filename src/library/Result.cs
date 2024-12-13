@@ -49,6 +49,12 @@ namespace Toolsfactory.Common
             IsSuccess = false;
         }
 
+        protected Result(IEnumerable<Error> errors)
+        {
+            _errors.AddRange(errors);
+            IsSuccess = false;
+        }
+
         /// <summary>
         /// Adds an error to the current result and sets the IsSuccess flag to false.
         /// </summary>
@@ -128,7 +134,7 @@ namespace Toolsfactory.Common
         /// </summary>
         /// <param name="errors">The errors to include in the Result.</param>
         /// <returns>A failed Result instance.</returns>
-        public static Result Failure(IEnumerable<Error> errors) => new Result().AddErrors(errors);
+        public static Result Failure(IEnumerable<Error> errors) => new Result(errors);
 
         /// <summary>
         /// Creates a failed Result with a single error.

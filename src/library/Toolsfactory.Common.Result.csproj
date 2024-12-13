@@ -9,8 +9,8 @@
     <Company>Toolsfactory</Company>
     <Description>A small library providing result types for streamlined handling of regular results that can be successful or not avoiding exceptions.</Description>
     <Copyright>(c) 2024 Michael Geissler</Copyright>
-    <PackageProjectUrl>github.com/toolsfactory/toolsfactory.common.result</PackageProjectUrl>
-    <RepositoryUrl>github.com/toolsfactory/toolsfactory.common.result</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/toolsfactory/toolsfactory.common.result</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toolsfactory/toolsfactory.common.result</RepositoryUrl>
     <BaseOutputPath>..\..\bin\</BaseOutputPath>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>Result; Result&lt;T&gt;; Error; Union</PackageTags>

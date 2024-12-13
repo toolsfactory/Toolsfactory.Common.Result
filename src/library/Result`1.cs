@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Toolsfactory.Common
 {
@@ -31,22 +32,29 @@ namespace Toolsfactory.Common
         /// Initializes a new instance of the <see cref="Result{T}"/> class with a value.
         /// </summary>
         /// <param name="value">The value of the result.</param>
-        private Result(T value)
+        protected Result(T value) : base()
         {
             _value = value;
-            IsSuccess = true;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Result{T}"/> class with an error.
         /// </summary>
         /// <param name="error">The error of the result.</param>
-        private Result(Error error)
+        protected Result(Error error) : base(error)
         {
             _value = default;
-            _errors.Add(error);
-            IsSuccess = false;
         }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Result{T}"/> class with multiple errors.
+        /// </summary>
+        /// <param name="errors">The errors of the result.</param>
+        protected Result(IEnumerable<Error> errors) : base(errors)
+        {
+            _value = default;
+        }
+
 
         /// <summary>
         /// Implicitly converts an error to a result.
@@ -87,6 +95,14 @@ namespace Toolsfactory.Common
         /// </summary>
         /// <param name="message">The error message to include in the Result.</param>
         /// <returns>A failed Result instance.</returns>
-        public static Result<T> Failure(string message) => new Result<T>(new Error(message));
+        public new static Result<T> Failure(string message) => new Result<T>(new Error(message));
+        
+        /// <summary>
+        /// Creates a failed Result with a list of errors.
+        /// </summary>
+        /// <param name="errors">The errors to include in the Result.</param>
+        /// <returns>A failed Result instance.</returns>
+        public new static Result<T> Failure(IEnumerable<Error> errors) => new Result<T>(errors);
+
     }
 }

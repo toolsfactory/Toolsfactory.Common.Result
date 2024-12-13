@@ -38,7 +38,11 @@ The `Result` and `Result<T>` classes provide a robust way to represent the outco
 - Throws an exception if you try to access the `Value` of a failed operation.
 - Ensures `Value` is cleared upon failure to prevent misuse.
 
-## Usage Examples
+### Extension methods
+- `Switch` and `Map` methods are provided to simplify handling success and failure scenarios.
+- `Bind`, `BindTryCatch`, and `Tap` methods are provided to simplify chaining operations following the Railway oriented pattern. (Inspired by this [Video](https://www.youtube.com/watch?v=C1oGnDEnS14))
+
+# Usage Examples
 
 ### Creating a Success Result
 ```csharp
@@ -259,3 +263,6 @@ class Program
     }
 }
 ```
+
+### Railway oriented pattern samples
+planned for the next update
