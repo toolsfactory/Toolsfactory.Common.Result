@@ -265,4 +265,8 @@ class Program
 ```
 
 ### Railway oriented pattern samples
-planned for the next update
+```csharp
+Result<string> result = Result<bool>.Success(true)
+        .Bind<bool, string>(x => x ? "Great!" : "Not so great...")
+        .Tap(Console.WriteLine);
+```
