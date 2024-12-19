@@ -9,6 +9,8 @@ namespace Toolsfactory.Common
     /// </summary>
     public class Result : IResult
     {
+        private const string InvalidErrorAccessMessage = "Cannot access RootError of a successful result";
+
         protected readonly List<Error> _errors = new();
 
         /// <summary>
@@ -22,37 +24,22 @@ namespace Toolsfactory.Common
         public bool IsFaulted => !IsSuccess;
 
         /// <summary>
-        /// Gets the root error of the result. If the result is successful, throws an exception.
+        /// The root error of the result. If the result is successful, throws an <see cref="InvalidOperationException"/>.
         /// </summary>
-        public Error RootError
-        {
-            get
-            {
-                if (IsFaulted) return _errors.FirstOrDefault() ?? Error.Default;
-                throw new InvalidOperationException("Cannot access Error of a success result");
-            }
-        }
+        public Error RootError => IsFaulted ? _errors.FirstOrDefault() ?? Error.Default : throw new InvalidOperationException(InvalidErrorAccessMessage);
 
         /// <summary>
         /// Gets the list of errors associated with the result.
         /// </summary>
-        public IReadOnlyList<Error> Errors => _errors;
+        public IReadOnlyList<Error> Errors => _errors.AsReadOnly();
 
-        protected Result()
+        protected Result(bool isSuccess, IEnumerable<Error>? errors)
         {
-            IsSuccess = true;
-        }
-
-        protected Result(Error error)
-        {
-            _errors.Add(error);
-            IsSuccess = false;
-        }
-
-        protected Result(IEnumerable<Error> errors)
-        {
-            _errors.AddRange(errors);
-            IsSuccess = false;
+            IsSuccess = isSuccess;
+            if (IsFaulted && errors != null)
+            {
+                _errors.AddRange(errors);
+            }
         }
 
         /// <summary>
@@ -127,33 +114,33 @@ namespace Toolsfactory.Common
         /// Creates a successful Result.
         /// </summary>
         /// <returns>A successful Result instance.</returns>
-        public static Result Success() => new Result();
+        public static Result Success() => new Result(true, null);
 
         /// <summary>
         /// Creates a failed Result with a list of errors.
         /// </summary>
         /// <param name="errors">The errors to include in the Result.</param>
         /// <returns>A failed Result instance.</returns>
-        public static Result Failure(IEnumerable<Error> errors) => new Result(errors);
+        public static Result Failure(IEnumerable<Error> errors) => new Result(false, errors);
 
         /// <summary>
         /// Creates a failed Result with a single error.
         /// </summary>
         /// <param name="error">The error to include in the Result.</param>
         /// <returns>A failed Result instance.</returns>
-        public static Result Failure(Error error) => new Result(error);
+        public static Result Failure(Error error) => new Result(false, [error]);
 
         /// <summary>
         /// Creates a failed Result with a default error.
         /// </summary>
         /// <returns>A failed Result instance.</returns>
-        public static Result Failure() => new Result(Error.Default);
+        public static Result Failure() => new Result(false, [Error.Default]);
 
         /// <summary>
         /// Creates a failed Result with a message.
         /// </summary>
         /// <param name="message">The error message to include in the Result.</param>
         /// <returns>A failed Result instance.</returns>
-        public static Result Failure(string message) => new Result(new Error(message));
+        public static Result Failure(string message) => new Result(false, [new Error(message)]);
     }
 }
